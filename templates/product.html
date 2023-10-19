@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Grocery App</title>
+</head>
+<body>
+  <div class="container d-flex justify-content-center">
+    <div class="row m-5">
+      <div class="card text-center mb-3" style="width: 18rem;">
+        <div class="card-body">
+          {% if mode=="add" %}
+          <h1>Add product Here!</h1>
+          <form method="post" action="/products">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">name</label>
+              <input type="text" class="form-control"   name="name" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">description</label>
+              <input type="text" class="form-control" pattern="[A-Za-z.!/]+" name="description" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Image Name</label>
+              <input type="file" class="form-control" name="img_name" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">price</label>
+              <input type="number" min="1" class="form-control" name="price" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">stock</label>
+              <input type="number" min="1" class="form-control" name="stock" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">mgf_date</label>
+              <input type="date" class="form-control" name="mgf_date" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">exp_date</label>
+              <input type="date" class="form-control" name="exp_date" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+            </div>
+            <select class="form-select mb-3" aria-label="Default select example" name="category_id" required>
+              {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+          <a href="{{url_for('manager_page')}}" class="btn btn-danger">Cancel</a>
+          {% elif mode=="update" %}
+          <h1>update product Here!</h1>
+          <form method="post" action="/products/{{product.id}}">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">name</label>
+              <input type="text" class="form-control"  name="name" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.name}}" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">description</label>
+              <input type="text" pattern="[A-Za-z.!/]+" class="form-control" name="description" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.description}}" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Image Name</label>
+              <input type="file" class="form-control" name="img_name" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">price</label>
+              <input type="number" min="1" class="form-control" name="price" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.price}}" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">stock</label>
+              <input type="number" class="form-control" min="1" name="stock" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.stock}}" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">mgf_date</label>
+              <input type="date" class="form-control" name="mgf_date" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.mgf_date.strftime('%Y-%m-%d')}}" required>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">exp_date</label>
+              <input type="date" class="form-control" name="exp_date" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.exp_date.strftime('%Y-%m-%d')}}" required>
+            </div>
+            <select class="form-select mb-3" aria-label="Default select example" name="category_id" required>
+              <option value="{{ product.category_id }}" selected>select category</option>
+              {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-light">update</button>
+          </form>
+          <a href="{{url_for('manager_page')}}" class="btn btn-danger">Cancel</a>
+          {% elif mode=="delete" %}
+          <h1>Delete product Here!</h1>
+          <form method="post" action="/products/delete/{{product.id}}">
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">name</label>
+              <input type="text" class="form-control" name="name" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.name}}" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">description</label>
+              <input type="text" class="form-control" name="description" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.description}}" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">price</label>
+              <input type="number" class="form-control" name="price" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.price}}" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">stock</label>
+              <input type="number" class="form-control" name="stock" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.stock}}" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">mgf_date</label>
+              <input type="date" class="form-control" name="mgf_date" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.mgf_date.strftime('%Y-%m-%d')}}" readonly>
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">exp_date</label>
+              <input type="date" class="form-control" name="exp_date" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{product.exp_date.strftime('%Y-%m-%d')}}" readonly>
+            </div>
+            <button type="submit" class="btn btn-primary">Confirm Delete</button>
+          </form>
+          <a href="{{url_for('manager_page')}}" class="btn btn-danger">Cancel</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

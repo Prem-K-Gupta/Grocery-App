@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Grocery App</title>
+</head>
+<body>
+  <div class="container d-flex justify-content-center">
+    <div class="row m-5"> 
+      <div class="card text-center mb-3" style="width: 72rem;">
+        <div class="card-body">
+          <h1>Items in your cart!</h1>
+          <h3>Items with low stock will be added up to their maximum availability. Either you can Proceed or Remove!</h3>
+          <form method="post" action="/user/checkout">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Item name</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Remove from cart</th>
+                  <th scope="col">Total Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for key in products.keys() %}
+                <tr>
+                  <th scope="row">{{loop.index}}</th>
+                  <td>{{products[key][0]}}</td>
+                  <td><input type="hidden" class="form-control" name="Qty" value="{{products[key][1]|string + '_' + key|string}}">
+                    <input type="text" class="form-control" name="toshow" value="{{products[key][1]}}" readonly></td>
+                  <td><a class="btn btn-danger" href="/remove/item/{{key}}">remove</a></td>
+                  <td>"{{products[key][2] * products[key][1]}}"</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                  <td colspan="3">Grand Total</td>
+                  <td colspan="2">{{total}}</td>
+                </tr>
+                <tr>
+                  <td colspan="3">
+                    <label for="type" class="form-label">Apply Coupon</label>
+                    <select class="form-select mb-3" aria-label="Default select example" name="is_coupon_id">
+                      <option >Select Coupon</option>
+                      {% for coupon in coupons %}
+                      <option value="{{coupon.id}}">{{coupon.code}} type {{coupon.type}} value {{coupon.value}}</option>
+                      {% endfor %}
+                    </select>
+                  </td>
+                  <td colspan="2">
+                    <button type="submit" class="btn btn-success mb-2">Checkout & pay</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="5">
+                    <a class="btn btn-danger" href="/user/cancel/checkout">Cancel</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

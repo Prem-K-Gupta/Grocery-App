@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Grocery App</title>
+</head>
+<body>
+  <div class="container m-5">
+    <div class="row m-5">
+      <div class="card text-center mb-3" style="width: 72rem;">
+        <div class="card-body">
+          <h1>Your order history</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">product name</th>
+                <th scope="col">category name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+              <tr>
+                <th scope="row">{{loop.index}}</th>
+                <td>{{order.product_name}}</td>
+                <td>{{order.category_name}}</td>
+                <td>{{order.quantity}}</td>
+                <td>{{order.amount}}</td>
+              </tr>
+              {% endfor %}
+              <tr>
+                <td colspan="4">
+                  <a class="btn btn-light" href="/user">Go to home</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
